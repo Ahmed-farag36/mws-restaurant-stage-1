@@ -1,9 +1,16 @@
 {
-  "restaurants": [{
+  "restaurants": [
+    {
     "id": 1,
     "name": "Mission Chinese Food",
     "neighborhood": "Manhattan",
-    "photograph": "1.jpg",
+    "photograph": {
+      "photoJPG400": "1_400.jpg",
+      "photoJPG": "1.jpg",
+      "photoWebp400": "1_400.webp",
+      "photoWebp": "1.webp",
+      "alt": "Some people having fun while eating"
+    },
     "address": "171 E Broadway, New York, NY 10002",
     "latlng": {
       "lat": 40.713829,
@@ -42,7 +49,13 @@
     "id": 2,
     "name": "Emily",
     "neighborhood": "Brooklyn",
-    "photograph": "2.jpg",
+    "photograph": {
+      "photoJPG400": "2_400.jpg",
+      "photoJPG": "2.jpg",
+      "photoWebp400": "2_400.webp",
+      "photoWebp": "2.webp",
+      "alt": "a big tasty pizza"
+    },
     "address": "919 Fulton St, Brooklyn, NY 11238",
     "latlng": {
       "lat": 40.683555,
@@ -81,7 +94,13 @@
     "id": 3,
     "name": "Kang Ho Dong Baekjeong",
     "neighborhood": "Manhattan",
-    "photograph": "3.jpg",
+    "photograph": {
+      "photoJPG400": "3_400.jpg",
+      "photoJPG": "3.jpg",
+      "photoWebp400": "3_400.webp",
+      "photoWebp": "3.webp",
+      "alt": "Stylish food court with polished wooden chairs"
+    },
     "address": "1 E 32nd St, New York, NY 10016",
     "latlng": {
       "lat": 40.747143,
@@ -120,7 +139,13 @@
     "id": 4,
     "name": "Katz's Delicatessen",
     "neighborhood": "Manhattan",
-    "photograph": "4.jpg",
+    "photograph": {
+      "photoJPG400": "4_400.jpg",
+      "photoJPG": "4.jpg",
+      "photoWebp400": "4_400.webp",
+      "photoWebp": "4.webp",
+      "alt": "Nice exterior scene for the restaurant during night"
+    },
     "address": "205 E Houston St, New York, NY 10002",
     "latlng": {
       "lat": 40.722216,
@@ -159,8 +184,13 @@
     "id": 5,
     "name": "Roberta's Pizza",
     "neighborhood": "Brooklyn",
-    "photograph": "5.jpg",
-    "address": "261 Moore St, Brooklyn, NY 11206",
+    "photograph": {
+      "photoJPG400": "5_400.jpg",
+      "photoJPG": "5.jpg",
+      "photoWebp400": "5_400.webp",
+      "photoWebp": "5.webp",
+      "alt": "People eating while the restaurant staff appears preparing pizza behind"
+    },    "address": "261 Moore St, Brooklyn, NY 11206",
     "latlng": {
       "lat": 40.705089,
       "lng": -73.933585
@@ -198,8 +228,13 @@
     "id": 6,
     "name": "Hometown BBQ",
     "neighborhood": "Brooklyn",
-    "photograph": "6.jpg",
-    "address": "454 Van Brunt St, Brooklyn, NY 11231",
+    "photograph": {
+      "photoJPG400": "6_400.jpg",
+      "photoJPG": "6.jpg",
+      "photoWebp400": "6_400.webp",
+      "photoWebp": "6.webp",
+      "alt": "Simple decorative with wooden chairs and roof and big flag of America"
+    },    "address": "454 Van Brunt St, Brooklyn, NY 11231",
     "latlng": {
       "lat": 40.674925,
       "lng": -74.016162
@@ -237,8 +272,13 @@
     "id": 7,
     "name": "Superiority Burger",
     "neighborhood": "Manhattan",
-    "photograph": "7.jpg",
-    "address": "430 E 9th St, New York, NY 10009",
+    "photograph": {
+      "photoJPG400": "7_400.jpg",
+      "photoJPG": "7.jpg",
+      "photoWebp400": "7_400.webp",
+      "photoWebp": "7.webp",
+      "alt": "Exterior scene for restaurant in black and white"
+    },    "address": "430 E 9th St, New York, NY 10009",
     "latlng": {
       "lat": 40.727397,
       "lng": -73.983645
@@ -276,8 +316,13 @@
     "id": 8,
     "name": "The Dutch",
     "neighborhood": "Manhattan",
-    "photograph": "8.jpg",
-    "address": "131 Sullivan St, New York, NY 10012",
+    "photograph": {
+      "photoJPG400": "8_400.jpg",
+      "photoJPG": "8.jpg",
+      "photoWebp400": "8_400.webp",
+      "photoWebp": "8.webp",
+      "alt": "A magnificent exterior scene for the restaurant during the day"
+    },    "address": "131 Sullivan St, New York, NY 10012",
     "latlng": {
       "lat": 40.726584,
       "lng": -74.002082
@@ -315,8 +360,13 @@
     "id": 9,
     "name": "Mu Ramen",
     "neighborhood": "Queens",
-    "photograph": "9.jpg",
-    "address": "1209 Jackson Ave, Queens, NY 11101",
+    "photograph": {
+      "photoJPG400": "9_400.jpg",
+      "photoJPG": "9.jpg",
+      "photoWebp400": "9_400.webp",
+      "photoWebp": "9.webp",
+      "alt": "Close up picture in black and white, Many Asians eating using sticks"
+    },    "address": "1209 Jackson Ave, Queens, NY 11101",
     "latlng": {
       "lat": 40.743797,
       "lng": -73.950652
@@ -354,8 +404,13 @@
     "id": 10,
     "name": "Casa Enrique",
     "neighborhood": "Queens",
-    "photograph": "10.jpg",
-    "address": "5-48 49th Ave, Queens, NY 11101",
+    "photograph": {
+      "photoJPG400": "10_400.jpg",
+      "photoJPG": "10.jpg",
+      "photoWebp400": "10_400.webp",
+      "photoWebp": "10.webp",
+      "alt": "A modern decorative theme in white and light grey appears bar and many tables"
+    },    "address": "5-48 49th Ave, Queens, NY 11101",
     "latlng": {
       "lat": 40.743394,
       "lng": -73.954235
@@ -389,5 +444,6 @@
         "comments": "For a Michelin star restaurant, it's fairly priced and the food is fairly good. Started with a strawberry margarita which was good in flavor but not much alcohol. Had the chicken enchiladas with salsa verde and it was really good. Great balance in flavor and a good portion. Extra tasty with their hot sauces. My wife had the lamb but it was a bit too salty for our taste. Although, it was cooked very well and fell off the bone. The highlight of the night was the tres leches cake. Probably the best I've ever had to be honest. Not too sweet and very milky. Overall, one of my top 3 favorite Mexican in NY."
       }
     ]
-  }]
+  }
+]
 }

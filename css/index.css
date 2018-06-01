@@ -1,0 +1,139 @@
+* {
+  box-sizing: border-box;
+}
+
+body{
+	padding: 0;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+/* ====================== Navigation ====================== */
+header{
+	padding: 20px;
+}
+
+nav h1 {
+  text-align: center;
+  font-size: 250%;
+  margin: 0;
+  font-family: "Merriweather", serif;
+}
+
+nav h1 a {
+  color: #333;
+}
+
+nav h1 span {
+  font-size: 30%;
+}
+
+/* ====================== Map ====================== */
+#map {
+	height: 60vh;
+	width: 100%;
+}
+
+/* ====================== Restaurant Filtering ====================== */
+.filter-options{
+	background-color: lightgoldenrodyellow;
+	padding: 10px;
+}
+
+.filter-options h2 {
+  margin: 0 0 10px;
+}
+
+.filter-options select {
+	padding: 10px 30px ;
+  display: block;
+  border: 2px solid navajowhite;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+/* ====================== Restaurant Listing ====================== */
+#restaurants-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0;
+}
+
+#restaurants-list li {
+  width: 320px;
+  border: 2px solid #ebebeb;
+  border-radius: 1%;
+  margin: 20px;
+  box-shadow: 1px 1px 5px #ddd;
+  list-style: none;
+}
+
+.restaurant-img {
+  max-width: calc(100% - 8px);
+  margin: 4px;
+}
+
+#restaurants-list h3 {
+  margin: 10px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+#restaurants-list p {
+  color: #585858;
+  margin: 10px;
+  text-align: center;
+  font-size: 80%;
+}
+
+#restaurants-list a {
+  padding: 10px 30px;
+  color: #404040;
+  border-radius: 4px;
+  background-color: gold;
+}
+
+#footer {
+  text-align: center;
+  margin: 20px;
+  font-size: 80%;
+}
+
+#footer a {
+  color: #2676cc;
+}
+
+a {
+  text-decoration: none;
+}
+
+/*========================// minor breakpoint // Media Query(min 460) ====================*/
+@media screen and (min-width: 460px) {
+  .filter-options select {
+    padding: 10px 50px ;
+    display: inline;
+  }
+}
+
+/*========================// minor breakpoint // Media Query(min 600) ====================*/
+@media screen and (min-width: 600px) {
+  #restaurants-list li {
+    width: 256px;
+  }
+}
+
+/*======================== Media Query greater than 768 ====================*/
+@media screen and (min-width: 768px) {
+  nav h1 {
+    font-size: 350%;
+  }
+
+  #restaurants-list li {
+    width: 320px;
+  }
+
+  footer {
+    font-size: 120%;
+  }
+}
