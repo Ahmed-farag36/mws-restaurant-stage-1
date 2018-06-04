@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -17,24 +17,28 @@
   <!-- Beginning header -->
   <header>
     <!-- Beginning nav -->
-    <nav>
+    <nav role="navigation">
       <h1>
         <a href="/">Reviews<span>Restaurants</span></a>
       </h1>
+      <!-- Beginning breadcrumb -->
+      <ul id="breadcrumb" aria-label="breadcrumb" >
+        <li><a href="/">Home</a></li>
+      </ul>
+      <!-- End breadcrumb -->
     </nav>
-    <!-- Beginning breadcrumb -->
-    <ul id="breadcrumb" >
-      <li><a href="/">Home</a></li>
-    </ul>
-    <!-- End breadcrumb -->
     <!-- End nav -->
   </header>
   <!-- End header -->
-
   <!-- Beginning main -->
   <main id="maincontent">
+    <!-- Beginning map -->
+    <section id="map-container" role="application" aria-label="Google Maps">
+      <div id="map"></div>
+    </section>
+    <!-- End map -->
     <!-- Beginning restaurant -->
-    <section id="restaurant-container">
+    <section id="restaurant-container" aria-labelledby="restaurant-name">
       <h2 id="restaurant-name"></h2>
       <picture id="restaurant-picture">
         <source id="picture-source">
@@ -47,18 +51,12 @@
     </section>
     <!-- end restaurant -->
     <!-- Beginning reviews -->
-    <section id="reviews-container">
+    <section id="reviews-container" aria-labelledby="reviews">
       <ul id="reviews-list"></ul>
     </section>
-    <!-- Beginning map -->
-    <section id="map-container">
-        <div id="map"></div>
-      </section>
-      <!-- End map -->
     <!-- End reviews -->
   </main>
   <!-- End main -->
-
   <!-- Beginning footer -->
   <footer id="footer">
     <hr>
@@ -73,9 +71,7 @@
   <script src="js/restaurant_info.js"></script>
   <!-- Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb-FKFCHjxK6OxRwWdVoUDL33vzlN1xfU&libraries=places&callback=initMap"></script>
-
   <!-- End scripts -->
-
 </body>
 
 </html>

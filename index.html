@@ -23,13 +23,13 @@
 
     <main id="maincontent">
 
-      <section id="map-container">
+      <section id="map-container" aria-label="Google maps" role="application">
         <div id="map"></div>
       </section>
 
-      <section>
+      <section aria-labelledby="filter">
         <div class="filter-options">
-          <h2>Filter Results</h2>
+          <h2 id="filter">Filter Results</h2>
           <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
             <option value="all">All Neighborhoods</option>
           </select>
@@ -37,6 +37,9 @@
             <option value="all">All Cuisines</option>
           </select>
         </div>
+      </section>
+
+      <section aria-label="restaurants list">
         <ul id="restaurants-list"></ul>
       </section>
 
@@ -56,9 +59,9 @@
         });
       };
     </script>
-    <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-    <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb-FKFCHjxK6OxRwWdVoUDL33vzlN1xfU&libraries=places&callback=initMap"></script>
+    <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
+    <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
 
   </body>
 

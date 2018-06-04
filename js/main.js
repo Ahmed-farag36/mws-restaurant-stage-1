@@ -142,12 +142,12 @@ createRestaurantHTML = (restaurant) => {
   image.src = DBHelper.imageSrcForRestaurant(restaurant);
   image.srcset = DBHelper.imageSrcsetForRestaurant(restaurant);
   image.alt = DBHelper.imageAltForRestaurant(restaurant);
-  image.sizes = '320px';
+  image.sizes = '399px';
   const picture = document.createElement('picture');
   const source = document.createElement('source');
   source.srcset = DBHelper.pictureSrcsetForRestaurant(restaurant);
   source.type = 'image/webp';
-  source.sizes = '(min-width: 0px) 320px';
+  source.sizes = '399px';
   picture.append(source);
   picture.append(image);
   li.append(picture);

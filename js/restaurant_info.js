@@ -53,6 +53,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   name.innerHTML = restaurant.name;
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
+  address.setAttribute('aria-label', `address ${restaurant.address}`);
   const picture = document.getElementById('restaurant-picture');
   const source = document.getElementById('picture-source');
   source.srcset = DBHelper.pictureSrcsetForRestaurant(restaurant);
@@ -66,6 +67,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   image.sizes = '(max-width: 649px) 100vw, (min-width: 650px) 50vw';
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
+  cuisine.setAttribute('aria-label', `${restaurant.cuisine_type} cuisine`);
   // fill operating hours
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
@@ -101,6 +103,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
+  title.id = 'reviews';
   container.appendChild(title);
 
   if (!reviews) {
@@ -148,6 +151,7 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;
   breadcrumb.appendChild(li);
+  breadcrumb.lastChild.setAttribute('aria-current', 'page');
 };
 
 //=======================================

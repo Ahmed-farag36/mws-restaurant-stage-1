@@ -156,7 +156,7 @@ class DBHelper {
   static imageSrcsetForRestaurant(restaurant) {
     return (`/img/${restaurant.photograph.photoJPG400} 400w, /img/${restaurant.photograph.photoJPG} 800w`);
   }
-  
+
   static imageSrcForRestaurant(restaurant) {
     return (`/img/${restaurant.photograph.photoJPG}`);
   }
@@ -185,5 +185,5 @@ class DBHelper {
 // Accessibility.
 //===============
 window.addEventListener('load', () => {
-  document.querySelector('iframe').tabIndex = -1;
+  document.querySelector('iframe').setAttribute('tabIndex', '-1');
 });
