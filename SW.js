@@ -7,17 +7,17 @@ self.addEventListener('install', (e) => {
 			cache.addAll([
 				"/",
 				"/restaurant.html",
-				"css/index.css",
-				"css/restaurant.css",
+				"css/uglified/index.css",
+				"css/uglified/restaurant.css",
 				"https://fonts.googleapis.com/css?family=Roboto:300,700",
 				"https://fonts.googleapis.com/css?family=Merriweather:900",
 				"https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmEU9fBBc4.woff2",
 				"https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxK.woff2",
 				"https://fonts.gstatic.com/s/merriweather/v19/u-4n0qyriQwlOrhSvowK_l52_wFZWMf6.woff2",
-				"http://localhost:8000/js/dbhelper.js",
+				"http://localhost:8000/js/uglified/dbhelper.js",
 				"http://localhost:8000/js/main.js",
 				"http://localhost:8000/js/restaurant_info.js",
-				"http://localhost:8000/data/restaurants.json",
+				"https://cdn.jsdelivr.net/npm/idb@2.1.3/lib/idb.min.js"
 			])
 		}),
 		caches.open(myImages).then(cache => {
@@ -61,7 +61,9 @@ self.addEventListener('install', (e) => {
 				'http://localhost:8000/img/10_400.jpg',
 				'http://localhost:8000/img/10_400.webp',
 				'http://localhost:8000/img/10.jpg',
-				'http://localhost:8000/img/10.webp'
+				'http://localhost:8000/img/10.webp',
+				'http://localhost:8000/img/food.png',
+				'http://localhost:8000/img/restaurant-icon-4.png'
 			])
 		})
 	)

@@ -1,0 +1,35 @@
+{
+  "name": "mws-restaurant-stage-1",
+  "version": "1.0.0",
+  "description": "---\r #### _Three Stage Course Material Project - Restaurant Reviews_",
+  "main": "SW.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ahmed-farag36/mws-restaurant-stage-1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ahmed-farag36/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/Ahmed-farag36/mws-restaurant-stage-1#readme",
+  "dependencies": {
+    "gulp-uglifycss": "^1.1.0",
+    "idb": "^2.1.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-concat-css": "^3.1.0",
+    "gulp-uglify": "^3.0.0",
+    "pump": "^3.0.0",
+    "uglify-js": "^3.4.3"
+  }
+}

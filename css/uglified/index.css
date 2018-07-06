@@ -1,0 +1,15 @@
+*{box-sizing:border-box}body{padding:0;margin:0;font-family:"Roboto",sans-serif}
+header{padding:20px,10px}nav h1{margin:10px;text-align:center;font-size:1.2em;font-family:"Merriweather",serif}
+nav h1 a{color:#333}nav h1 span{font-size:30%}#map{height:30vh;width:100%}.filter-options{padding:10px;background-color:lightgoldenrodyellow}
+.filter-options h2{margin-bottom:10px;font-size:1em}.filter-options select{margin-bottom:10px;padding:5px;font-size:.7em;border:2px solid navajowhite;border-radius:4px}
+#restaurants-list{display:flex;flex-wrap:wrap;justify-content:center;padding:0}#restaurants-list li{margin:5px;border:2px solid #ebebeb;border-radius:1%;box-shadow:1px 1px 5px #ddd;list-style:none}
+.restaurant-img{max-width:calc(100% - 8px);margin:4px}#restaurants-list h3{margin-top:0;text-align:center;font-size:.9em}
+#restaurants-list a{padding:5px;color:#404040;background-color:gold;display:block}
+#restaurants-list p{margin:10px;color:#585858;font-size:.8em;text-align:center}footer{text-align:center;margin:20px 5px;font-size:.6em}
+#footer a{color:#2676cc}a{text-decoration:none}@media screen and (min-width:250px){nav h1{font-size:1.5em}
+.filter-options select{padding:10px}#restaurants-list h3{font-size:1em}#restaurants-list a{padding:10px}
+footer{font-size:.7em}}@media screen and (min-width:420px){nav h1{font-size:2.5em;margin:25px}
+#map{height:50vh}#restaurants-list li{margin:20px}.filter-options h2{font-size:1.5em;margin:10px 0}
+.filter-options select{padding:10px 30px;font-size:.8em}}@media screen and (min-width:600px){#restaurants-list li{width:256px}
+footer{font-size:1em}}@media screen and (min-width:768px){nav h1{font-size:3.5em}
+#restaurants-list li{width:320px}}

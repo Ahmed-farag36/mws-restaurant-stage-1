@@ -12,40 +12,91 @@ class DBHelper {
     return `http://localhost:${port}/data/restaurants.json`;
   }
 
-  //=======================
+   //=======================
   // Fetch all restaurants.
   //=======================
   static fetchRestaurants(callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
-    xhr.onload = () => {
-      if (xhr.status === 200) { // Got a success response from server!
-        const json = JSON.parse(xhr.responseText);
-        const restaurants = json.restaurants;
-        callback(null, restaurants);
-      } else { // Oops!. Got an error from server.
-        const error = (`Request failed. Returned status of ${xhr.status}`);
-        callback(error, null);
-      }
-    };
-    xhr.send();
-  }
+    const imagesAlt = [
+      "Some people having fun while eating",
+      "a big tasty pizza",
+      "Stylish food court with polished wooden chairs",
+      "Nice exterior scene for the restaurant during night",
+      "People eating while the restaurant staff appears preparing pizza behind",
+      "Simple decorative with wooden chairs and roof and big flag of America",
+      "Exterior scene for restaurant in black and white",
+      "A magnificent exterior scene for the restaurant during the day",
+      "Close up picture in black and white, Many Asians eating using sticks",
+      "A modern decorative theme in white and light grey appears bar and many tables"
+    ];
 
+    dbPromise = idb.open('fetchedData', 1, upgradedDB => {
+      switch (upgradedDB.oldVersion) {
+        case 0:
+        case 1:
+        upgradedDB.createObjectStore('objStore', {keyPath: 'id'});
+      }
+    });
+
+    dbPromise.then(db => {
+      return db.transaction('objStore')
+        .objectStore('objStore').getAll();
+    }).then(restaurants => {
+      if (restaurants != false) {
+        callback(null, restaurants);
+      } else {
+        fetch('http://127.0.0.1:1337/restaurants').then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            // Oops!. Got an error from server.
+            var error = "Request failed. Returned status of " + res.status;
+            callback(error, null);
+          }
+        }).then(restaurants => {
+          restaurants.map((restaurant, index) => {
+            restaurant.photograph = {
+              photoJPG400: restaurant.id + "_400.jpg",
+              photoJPG: restaurant.id + ".jpg",
+              photoWebp400: restaurant.id + "_400.webp",
+              photoWebp: restaurant.id + ".webp",
+              alt: imagesAlt[index]
+            };
+          });
+          dbPromise.then(db => {
+            const tx = db.transaction('objStore', 'readwrite');
+            restaurants.map(restaurant => {
+              tx.objectStore('objStore').put(
+                restaurant
+              )
+              return tx.complete;
+            });
+            callback(null, restaurants);
+          }).catch(function (err) {
+              console.log(err);
+          });
+        });
+      };
+    });
+  }
   //==============================
   // Fetch a restaurant by its ID.
   //==============================
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants((error, restaurants) => {
+    DBHelper.fetchRestaurants((error) => {
       if (error) {
         callback(error, null);
       } else {
-        const restaurant = restaurants.find(r => r.id == id);
-        if (restaurant) { // Got the restaurant
-          callback(null, restaurant);
-        } else { // Restaurant does not exist in the database
-          callback('Restaurant does not exist', null);
-        }
+        dbPromise.then(db => {
+          return db.transaction('objStore')
+            .objectStore('objStore').get(Number(id));
+        }).then(restaurant => {
+          if (restaurant != false) { // Got the restaurant
+            callback(null, restaurant);
+          } else { // Restaurant does not exist in the database
+            callback('Restaurant does not exist', null);
+          }
+        });
       }
     });
   }
@@ -185,5 +236,6 @@ class DBHelper {
 // Accessibility.
 //===============
 window.addEventListener('load', () => {
-  document.querySelector('iframe').setAttribute('tabIndex', '-1');
+    document.querySelector('iframe').setAttribute('tabIndex', '-1');
 });
+let dbPromise;
