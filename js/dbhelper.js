@@ -83,20 +83,16 @@ class DBHelper {
   //==============================
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants((error) => {
+    DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) {
         callback(error, null);
       } else {
-        dbPromise.then(db => {
-          return db.transaction('objStore')
-            .objectStore('objStore').get(Number(id));
-        }).then(restaurant => {
+          const restaurant = restaurants[id - 1];
           if (restaurant != false) { // Got the restaurant
             callback(null, restaurant);
           } else { // Restaurant does not exist in the database
             callback('Restaurant does not exist', null);
           }
-        });
       }
     });
   }
