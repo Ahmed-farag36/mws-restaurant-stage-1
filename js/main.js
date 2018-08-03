@@ -1,7 +1,7 @@
 let restaurants,
     neighborhoods,
-    cuisines;
-var map;
+    cuisines,
+    map;
 var markers = [];
 
 //================================================================
@@ -139,31 +139,54 @@ createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.src = DBHelper.imageSrcForRestaurant(restaurant);
-  image.srcset = DBHelper.imageSrcsetForRestaurant(restaurant);
   image.alt = DBHelper.imageAltForRestaurant(restaurant);
   image.sizes = '399px';
   const picture = document.createElement('picture');
   const source = document.createElement('source');
-  source.srcset = DBHelper.pictureSrcsetForRestaurant(restaurant);
   source.type = 'image/webp';
   source.sizes = '399px';
   picture.append(source);
   picture.append(image);
   li.append(picture);
 
-  const restName = document.createElement('h3');
+  const btn = document.createElement('button');
+  const likeIcon = document.createElement('i');
+  likeIcon.className = 'icon-heart';
+  li.appendChild(btn).appendChild(likeIcon);
+  btn.onclick = () => DBHelper.handleBtnClick(btn, restaurant.id);
+  DBHelper.isRestaurantFavorite(btn, restaurant);
+
+  const restaurantName = document.createElement('h3');
   const moreDetails = document.createElement('a');
   moreDetails.innerHTML = restaurant.name;
   moreDetails.href = DBHelper.urlForRestaurant(restaurant);
-  restName.append(moreDetails);
-  li.append(restName);
+  restaurantName.append(moreDetails);
+  li.append(restaurantName);
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
   li.append(neighborhood);
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
   li.append(address);
+
+  // Lazy loading images
+  lazyLoadImage = (entries) =>{
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        image.src = DBHelper.imageSrcForRestaurant(restaurant);
+        image.srcset = DBHelper.imageSrcsetForRestaurant(restaurant);
+        source.srcset = DBHelper.pictureSrcsetForRestaurant(restaurant);
+        observer.unobserve(picture);
+      }
+    })
+  };
+  const observer = new IntersectionObserver(lazyLoadImage, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 1
+  });
+  observer.observe(picture);
+
   return li
 };
 
@@ -180,3 +203,16 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 };
+
+//===============================
+// Switch static to dynamic map.
+//===============================
+const mapContainer = document.querySelector('#map');
+const staticMap = document.querySelector('#static-map');
+staticMap.addEventListener('click', () => {
+  if (mapContainer.style.display === 'none') {
+    mapContainer.style.display = 'block';
+    staticMap.style.display = 'none';
+    document.querySelector('#tooltip').style.display = 'none';
+  }
+}, false);

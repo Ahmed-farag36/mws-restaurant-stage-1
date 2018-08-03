@@ -6,76 +6,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#37f">
   <link rel="manifest" href="/manifest.json">
-  <!-- Normalize.css for better cross-browser consistency -->
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css">
-  <!-- Main CSS file -->
   <link rel="stylesheet" href="css/uglified/restaurant.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,700">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:900">
   <title>Restaurant Info</title>
 </head>
 
 <body class="inside">
-  <!-- Beginning header -->
   <header>
-    <!-- Beginning nav -->
     <nav role="navigation">
       <h1>
-        <a href="/">Reviews<span>Restaurants</span></a>
+        <a href="/">Rev<i class="icon-spoon-knife"></i>ews<span>Restaurants</span></a>
       </h1>
-      <!-- Beginning breadcrumb -->
       <ul id="breadcrumb" aria-label="breadcrumb" >
         <li><a href="/">Home</a></li>
       </ul>
-      <!-- End breadcrumb -->
     </nav>
-    <!-- End nav -->
   </header>
-  <!-- End header -->
-  <!-- Beginning main -->
   <main id="maincontent">
-    <!-- Beginning map -->
     <section id="map-container" role="application" aria-label="Google Maps">
-      <div id="map"></div>
+      <div id="map" style="display: none"></div>
+      <img id="static-map" width=100% src="https://maps.googleapis.com/maps/api/staticmap?autoscale=1&size=600x400&maptype=roadmap&key=AIzaSyCXNkwhLgTjLW6kp53ycXcUo14c4csJzWU&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:1%7CMission+Chinese+food,+NY" alt="Google Map of NY">
+      <span id="tooltip">Click to load Interactive Map</span>
     </section>
-    <!-- End map -->
-    <!-- Beginning restaurant -->
     <section id="restaurant-container" aria-labelledby="restaurant-name">
       <h2 id="restaurant-name"></h2>
-      <picture id="restaurant-picture">
-        <source id="picture-source">
-        <img id="restaurant-img">
-      </picture>
-      <h4 id="restaurant-cuisine"></h4>
-      <h4 id="restaurant-address"></h4>
-      <h3>Working Hours</h3>
+      <div id="res-image">
+        <picture id="restaurant-picture">
+          <source id="picture-source" type="image/webp" sizes ="(max-width: 649px) 100vw, (min-width: 650px) 50vw">
+          <img id="restaurant-img" class="restaurant-img" sizes="(max-width: 649px) 100vw, (min-width: 650px) 50vw">
+        </picture>
+        <button id="fav-btn">
+          <i class="icon-heart"></i>
+        </button>
+        <h4 id="restaurant-cuisine">
+          <i class="icon-spoon-knife"></i>
+        </h4>
+      </div>
+      <h4 id="restaurant-address">
+        <i class="icon-location"></i>
+      </h4>
+      <h3><i class="icon-calendar"></i> Working Hours</h3>
       <table id="restaurant-hours"></table>
     </section>
-    <!-- end restaurant -->
-    <!-- Beginning reviews -->
     <section id="reviews-container" aria-labelledby="reviews">
+      <h3 id="reviews"><i class="icon-bubble2"></i> Reviews</h3>
+      <form>
+        <span id="error"></span>
+        <label for="name" aria-label="your name"></label>
+        <input type="text" id="name" placeholder="Your Name">
+        <label for="rating" aria-label="your rate"></label>
+        <input type="number" id="rating" placeholder="Your Rating" min="1" max="5">
+        <label for="comments" aria-label="your comment"></label>
+        <textarea id="comments" placeholder="Your Comment" rows="2"></textarea>
+        <button id="submit-review-btn">Submit</button>
+      </form>
       <ul id="reviews-list"></ul>
     </section>
-    <!-- End reviews -->
   </main>
-  <!-- End main -->
-  <!-- Beginning footer -->
   <footer id="footer">
     <hr>
-    Copyright (c) 2018 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    Copyright 4EGA(c) 2018 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
   </footer>
-  <!-- End footer -->
-
-  <!-- Beginning scripts -->
+  <script>
+    if (navigator.serviceWorker) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/SW.js").then(reg => {
+          console.log("registered", reg);
+        })
+      });
+    };
+  </script>
   <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/idb@2.1.3/lib/idb.min.js"></script>
-  <!-- Database helpers -->
-  <script src="js/uglified/dbhelper.js"></script>
-  <!-- Main javascript file -->
+  <script src="js//uglified/dbhelper.js"></script>
   <script src="js/restaurant_info.js"></script>
-  <!-- Google Maps -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb-FKFCHjxK6OxRwWdVoUDL33vzlN1xfU&libraries=places&callback=initMap"></script>
-  <!-- End scripts -->
+  <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCb-FKFCHjxK6OxRwWdVoUDL33vzlN1xfU&libraries=places&callback=initMap"></script>
 </body>
-
 </html>
 

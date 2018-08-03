@@ -1,5 +1,6 @@
-let restaurant;
-var map;
+let restaurant,
+    map,
+    reviewstToBePosted = [];
 
 //=========================================
 // Initialize Google map, called from HTML.
@@ -40,6 +41,8 @@ fetchRestaurantFromURL = (callback) => {
         return;
       }
       fillRestaurantHTML();
+      handleFavorite(restaurant);
+      getNewReviewData(restaurant);
       callback(null, restaurant)
     });
   }
@@ -52,28 +55,22 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
   const address = document.getElementById('restaurant-address');
-  address.innerHTML = restaurant.address;
+  address.innerHTML += restaurant.address;
   address.setAttribute('aria-label', `address ${restaurant.address}`);
-  const picture = document.getElementById('restaurant-picture');
   const source = document.getElementById('picture-source');
   source.srcset = DBHelper.pictureSrcsetForRestaurant(restaurant);
-  source.type = 'image/webp';
-  source.sizes = '(max-width: 649px) 100vw, (min-width: 650px) 50vw';
   const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img'
   image.src = DBHelper.imageSrcForRestaurant(restaurant);
   image.srcset = DBHelper.imageSrcsetForRestaurant(restaurant);
   image.alt = DBHelper.imageAltForRestaurant(restaurant);
-  image.sizes = '(max-width: 649px) 100vw, (min-width: 650px) 50vw';
   const cuisine = document.getElementById('restaurant-cuisine');
-  cuisine.innerHTML = restaurant.cuisine_type;
+  cuisine.innerHTML += restaurant.cuisine_type;
   cuisine.setAttribute('aria-label', `${restaurant.cuisine_type} cuisine`);
-  // fill operating hours
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
-  // fill reviews
-  fillReviewsHTML();
+  staticMap.src = `https://maps.googleapis.com/maps/api/staticmap?autoscale=1&size=600x400&maptype=roadmap&key=AIzaSyCXNkwhLgTjLW6kp53ycXcUo14c4csJzWU&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:1%7C${restaurant.name},+NY`
+  fetchReviewsById(restaurant)
 };
 
 //========================================================================
@@ -83,36 +80,48 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
   const hours = document.getElementById('restaurant-hours');
   for (let key in operatingHours) {
     const row = document.createElement('tr');
-
     const day = document.createElement('td');
     day.innerHTML = key;
     row.appendChild(day);
-
     const time = document.createElement('td');
     time.innerHTML = operatingHours[key];
     row.appendChild(time);
-
     hours.appendChild(row);
   }
 };
 
+//================================
+// Fetch reviews for a restaurant.
+//================================
+fetchReviewsById = (restaurant = self.restaurant) => {
+  let restaurantRelatedReviews = [];
+  DBHelper.fetchReviewsById(restaurant.id, (error, reviews) => {
+    if (error) {
+      callback(error, null);
+    } else {
+      reviews.map(review => {
+        if (restaurant.id == review.restaurant_id) {
+          restaurantRelatedReviews.unshift(review)
+        }
+      })
+    }
+    fillReviewsHTML(restaurantRelatedReviews);
+  })
+}
+
 //=====================================================
 // Create all reviews HTML and add them to the webpage.
 //=====================================================
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+fillReviewsHTML = (reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h3');
-  title.innerHTML = 'Reviews';
-  title.id = 'reviews';
-  container.appendChild(title);
-
-  if (!reviews) {
+  if (reviews == false) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
     container.appendChild(noReviews);
     return;
   }
   const ul = document.getElementById('reviews-list');
+  ul.innerHTML = "";
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
   });
@@ -129,19 +138,108 @@ createReviewHTML = (review) => {
   li.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  let formatedDate = new Date(review.updatedAt).toDateString();
+  date.innerHTML = formatedDate;
   li.appendChild(date);
 
   const rating = document.createElement('p');
-  rating.innerHTML = `Rating: ${review.rating}`;
+  for(let i = 0; i < review.rating; i++) {
+    rating.innerHTML += '<i class="icon-star-full"></i>';
+  }
   li.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
   li.appendChild(comments);
-
   return li;
 };
+
+//==============================
+// Extract new review form data.
+//==============================
+getNewReviewData = restaurant => {
+  document.querySelector('#submit-review-btn').onclick = e => {
+    e.preventDefault();
+    const name = document.querySelector('#name').value;
+    const rating = document.querySelector('#rating').value;
+    const comments = document.querySelector('#comments').value;
+    const restaurant_id = restaurant.id;
+    if (postNewReview({name, rating, comments, restaurant_id})) {
+      document.querySelector('#name').value = '';
+      document.querySelector('#rating').value = '';
+      document.querySelector('#comments').value = '';
+    }
+  }
+}
+
+//=================
+// Post new review.
+//=================
+postNewReview = ({name, rating, comments, restaurant_id}) => {
+  if (formValidation(name, rating, comments)) {
+    if (navigator.onLine) {
+      fetch('http://localhost:1337/reviews', {
+        method: 'POST',
+        body: JSON.stringify({
+          restaurant_id,
+          name,
+          rating,
+          comments
+        })  ,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }).then(res => res.json()).then(review => {
+        DBHelper.addReviewToIndexedDB(review);
+        fetchReviewsById(restaurant)
+      }).catch(err => {
+        throw err;
+      });
+      return true;
+    } else {
+      const statusLog = document.querySelector('#error');
+      statusLog.textContent = `Your review will be submitted once you back online...`;
+      if (window.localStorage) {
+        reviewstToBePosted.push({name, rating, comments, restaurant_id});
+        localStorage.setItem(`reviews${restaurant_id}`, JSON.stringify(reviewstToBePosted));
+      }
+      return true;
+    }
+  }
+  return false;
+}
+
+//==============================
+// Add comments form validation.
+//==============================
+formValidation = (name, rating, comments) => {
+  let errorLog = document.querySelector('#error');
+    errorLog.innerHTML = "";
+    if (!name || !rating || !comments) {
+      errorLog.innerHTML = `<i class="icon-warning"></i> Please fill the following fields: ${name ? '' : 'Name, '} ${rating ? '' : 'Rating, '} ${comments ? '' : 'Comment.'}`;
+      return false;
+    }
+    if (rating > 5 || rating < 1) {
+      errorLog.innerHTML = `Please enter your rate between 1 and 5`;
+      return false;
+    }
+    return true;
+}
+
+//=================
+// Syncing reviews.
+//=================
+window.addEventListener('online', e => {
+  if (localStorage.length) {
+    for (let i = 0; i < localStorage.length; i++) {
+        JSON.parse(localStorage.getItem(localStorage.key(i))).map(review => {
+          postNewReview(review);
+        })
+      }
+    localStorage.clear();
+    reviewstToBePosted = [];
+  }
+})
 
 //=======================================================
 // Add restaurant name to the breadcrumb navigation menu.
@@ -169,3 +267,25 @@ getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
+
+//============================
+// Handle favorite restaurant.
+//============================
+handleFavorite = restaurant => {
+  const btn = document.querySelector('#fav-btn');
+  DBHelper.isRestaurantFavorite(btn, restaurant);
+  btn.onclick = () => DBHelper.handleBtnClick(btn, restaurantIndex = restaurant.id);
+}
+
+//===============================
+// Switch static to dynamic map.
+//===============================
+const mapContainer = document.querySelector('#map');
+const staticMap = document.querySelector('#static-map');
+staticMap.addEventListener('click', () => {
+  if (mapContainer.style.display === 'none') {
+    mapContainer.style.display = 'block';
+    staticMap.style.display = 'none';
+    document.querySelector('#tooltip').style.display = 'none';
+  }
+}, false);

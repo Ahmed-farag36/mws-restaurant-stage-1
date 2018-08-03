@@ -27,3 +27,6 @@ Most of the code in this project has been written to the ES6 JavaScript specific
 
 ## the development server for stage 2
 cd ../../The Project_stage_two/mws-restaurant-stage-2-master && npm start
+
+## the development server for stage 3
+cd ../../The Project_stage_three/mws-restaurant-stage-3 && npm start

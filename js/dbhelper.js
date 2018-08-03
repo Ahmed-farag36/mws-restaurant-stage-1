@@ -3,18 +3,24 @@
 //==================================
 class DBHelper {
 
-  //==============================================================
-  // Database URL.
-  // Change this to restaurants.json file location on your server.
-  //==============================================================
-  static get DATABASE_URL() {
-    const port = 8000           // Change this to your server port
-    return `http://localhost:${port}/data/restaurants.json`;
+  //===============================
+  // Create IndexedDB objectStores.
+  //===============================
+  static createIDBObjectStores() {
+    dbPromise = idb.open('fetchedData', 1, upgradedDB => {
+      switch (upgradedDB.oldVersion) {
+        case 0:
+        upgradedDB.createObjectStore('restaurantsStore', {keyPath: 'id'});
+        for (let i = 1; i <= 10; i++) {
+          upgradedDB.createObjectStore(`reviewsStore${i}`, {keyPath: 'id'});
+        }
+      }
+    });
   }
 
-   //=======================
-  // Fetch all restaurants.
-  //=======================
+  //=============================
+  // Fetch and cache restaurants.
+  //=============================
   static fetchRestaurants(callback) {
     const imagesAlt = [
       "Some people having fun while eating",
@@ -29,17 +35,9 @@ class DBHelper {
       "A modern decorative theme in white and light grey appears bar and many tables"
     ];
 
-    dbPromise = idb.open('fetchedData', 1, upgradedDB => {
-      switch (upgradedDB.oldVersion) {
-        case 0:
-        case 1:
-        upgradedDB.createObjectStore('objStore', {keyPath: 'id'});
-      }
-    });
-
     dbPromise.then(db => {
-      return db.transaction('objStore')
-        .objectStore('objStore').getAll();
+      return db.transaction('restaurantsStore')
+        .objectStore('restaurantsStore').getAll();
     }).then(restaurants => {
       if (restaurants != false) {
         callback(null, restaurants);
@@ -63,9 +61,9 @@ class DBHelper {
             };
           });
           dbPromise.then(db => {
-            const tx = db.transaction('objStore', 'readwrite');
+            const tx = db.transaction('restaurantsStore', 'readwrite');
             restaurants.map(restaurant => {
-              tx.objectStore('objStore').put(
+              tx.objectStore('restaurantsStore').put(
                 restaurant
               )
               return tx.complete;
@@ -78,6 +76,94 @@ class DBHelper {
       };
     });
   }
+
+  //=========================
+  // Fetch and cache reviews.
+  //=========================
+  static fetchReviewsById(id, callback) {
+    dbPromise.then(db => {
+      return db.transaction(`reviewsStore${id}`)
+        .objectStore(`reviewsStore${id}`).getAll();
+    }).then(reviews => {
+      if (reviews != false) {
+        callback(null, reviews);
+      } else {
+        fetch(`http://localhost:1337/reviews/?restaurant_id=${id}`).then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            // Oops!. Got an error from server.
+            var error = "Request failed. Returned status of " + res.status;
+            callback(error, null);
+          }
+        }).then(reviews => {
+          dbPromise.then(db => {
+            const tx = db.transaction(`reviewsStore${id}`, 'readwrite');
+            reviews.map(review => {
+              tx.objectStore(`reviewsStore${id}`).put(
+                review
+              )
+              return tx.complete;
+            });
+
+            callback(null, reviews);
+          }).catch(function (err) {
+              console.log(err);
+          });
+        })
+      };
+    });
+  }
+
+  //========================
+  //Add review to IndexedDB.
+  //========================
+  static addReviewToIndexedDB(review) {
+    dbPromise.then(db => {
+      db.transaction(`reviewsStore${review.restaurant_id}`, 'readwrite').objectStore(`reviewsStore${review.restaurant_id}`).put(review);
+    })
+  }
+
+  //=================================
+  // Check if restaurant is favorite.
+  //=================================
+  static isRestaurantFavorite(btn , restaurant) {
+    if (restaurant.is_favorite == 'true') {
+      btn.style.color = 'lightgreen';
+      btn.setAttribute('aria-label', 'favorite checked')
+    } else {
+      btn.style.color = 'lightgrey';
+      btn.setAttribute('aria-label', 'favorite unchecked')
+    }
+  }
+
+  //=============================
+  //handle favorite click button.
+  //=============================
+  static handleBtnClick(btn, restaurantIndex) {
+    let isFavorite = null;
+    dbPromise.then(db => {
+      return db.transaction('restaurantsStore').objectStore('restaurantsStore').get(restaurantIndex)
+    }).then(restaurant => {
+      if (restaurant.is_favorite == 'true') {
+        isFavorite = 'false';
+        btn.style.color = 'lightgray'
+      } else {
+        isFavorite = 'true';
+        btn.style.color = 'lightgreen'
+      }
+      fetch(`http://localhost:1337/restaurants/${restaurantIndex}/?is_favorite=${isFavorite}`, {
+        method: 'PUT'
+      }).then(() => {
+        restaurant.is_favorite = isFavorite;
+        dbPromise.then(db => {
+          db.transaction('restaurantsStore', 'readwrite').objectStore('restaurantsStore').put(restaurant);
+        })
+      })
+    })
+  }
+
+
   //==============================
   // Fetch a restaurant by its ID.
   //==============================
@@ -235,3 +321,4 @@ window.addEventListener('load', () => {
     document.querySelector('iframe').setAttribute('tabIndex', '-1');
 });
 let dbPromise;
+DBHelper.createIDBObjectStores();

@@ -10,9 +10,7 @@ var uglifycss = require('gulp-uglifycss');
 gulp.task('css', function () {
   return gulp.src([
     './css/index.css',
-    './css/restaurant.css',
-    'https://fonts.googleapis.com/css?family=Roboto:300,700',
-    'https://fonts.googleapis.com/css?family=Merriweather:900'
+    './css/restaurant.css'
   ])
     .pipe(uglifycss({
         "maxLineLen": 80,
